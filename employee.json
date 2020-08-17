@@ -1,8 +1,8 @@
-{"ID":0,"name":"Ivan","payment":10.0}
-{"ID":1,"name":"Mariya","payment":500.0}
-{"ID":2,"name":"Kirill","payment":7.0}
-{"ID":3,"name":"Alex","payment":3.0}
-{"ID":4,"name":"Gennady","payment":5.0}
-{"ID":5,"name":"Bogdan","payment":350.0}
-{"ID":6,"name":"Ilya","payment":200.0}
-{"ID":7,"name":"Nikita","payment":1000.0}
+{"type":"HE","ID":0,"name":"Ivan","payment":10.0}
+{"type":"FE","ID":1,"name":"Mariya","payment":500.0}
+{"type":"HE","ID":2,"name":"Kirill","payment":7.0}
+{"type":"HE","ID":3,"name":"Alex","payment":3.0}
+{"type":"HE","ID":4,"name":"Gennady","payment":5.0}
+{"type":"FE","ID":5,"name":"Bogdan","payment":350.0}
+{"type":"FE","ID":6,"name":"Ilya","payment":200.0}
+{"type":"FE","ID":7,"name":"Nikita","payment":1000.0}
