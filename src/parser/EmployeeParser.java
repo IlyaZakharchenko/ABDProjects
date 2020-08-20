@@ -1,9 +1,10 @@
 package parser;
 
 import base.Employee;
-import exception.WrongFileFormatException;
+import exception.WrongFormatException;
 
 public interface EmployeeParser {
-    Employee parseEmployee(String str);
+    Employee parseEmployee(String str) throws WrongFormatException;
+
     String employeeToString(Employee employee);
 }

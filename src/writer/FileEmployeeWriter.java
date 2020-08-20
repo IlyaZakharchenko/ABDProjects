@@ -2,7 +2,7 @@ package writer;
 
 import base.BaseEmployeeWriter;
 import base.Employee;
-import parser.FileEmployeeParser;
+import parser.EmployeeParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,21 +12,21 @@ import java.util.ArrayList;
 
 public class FileEmployeeWriter extends BaseEmployeeWriter {
 
-    private final FileEmployeeParser PARSER = new FileEmployeeParser();
+    private final EmployeeParser parser;
+
+    public FileEmployeeWriter(EmployeeParser parser) {
+        this.parser = parser;
+    }
 
     @Override
-    public void writeEmployee(ArrayList<Employee> employeeList, String filePath) {
-        try {
-            File file = new File(filePath);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+    public void writeEmployee(ArrayList<Employee> employeeList, String filePath) throws IOException {
+        File file = new File(filePath);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
-            for (Employee employee : employeeList) {
-                writer.write(PARSER.employeeToString(employee));
-                writer.newLine();
-            }
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (Employee employee : employeeList) {
+            writer.write(parser.employeeToString(employee));
+            writer.newLine();
         }
+        writer.flush();
     }
 }

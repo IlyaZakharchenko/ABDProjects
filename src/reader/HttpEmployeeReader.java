@@ -2,9 +2,8 @@ package reader;
 
 import base.BaseEmployeeReader;
 import base.Employee;
-import com.google.gson.*;
-import model.FulltimeEmployee;
-import model.HourEmployee;
+import exception.WrongFormatException;
+import parser.EmployeeParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,32 +14,27 @@ import java.util.ArrayList;
 
 public class HttpEmployeeReader extends BaseEmployeeReader {
 
+    private final EmployeeParser parser;
+
+    public HttpEmployeeReader(EmployeeParser parser) {
+        this.parser = parser;
+    }
+
     @Override
-    public ArrayList<Employee> readEmployee(String filePath) {
+    public ArrayList<Employee> readEmployee(String filePath) throws IOException, WrongFormatException {
         ArrayList<Employee> employees = new ArrayList<>();
-        try {
-            URL url = new URL(filePath);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoInput(true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            Gson gson = new Gson();
-            while (true) {
-                String line = reader.readLine();
-                if (line == null) {
-                    break;
-                } else {
-                    if (line.matches(".*\"type\":\"HE\"")) {
-                        employees.add(gson.fromJson(line, HourEmployee.class));
-                    }
-                    else {
-                        employees.add(gson.fromJson(line, FulltimeEmployee.class));
-                    }
-                }
+        URL url = new URL(filePath);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoInput(true);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        while (true) {
+            String line = reader.readLine();
+            if (line == null) {
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            employees.add(parser.parseEmployee(line));
         }
         return employees;
     }

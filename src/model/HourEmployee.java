@@ -4,13 +4,14 @@ import base.Employee;
 
 public class HourEmployee extends Employee {
 
+    private static final double PAYMENT_FACTOR = 20.8 * 8;
+
     public HourEmployee(int ID, String name, double payment) {
         super(ID, name, payment);
-        type = "HE";
     }
 
     @Override
     public double calculatePayment() {
-        return 20.8 * 8 * payment;
+        return PAYMENT_FACTOR * payment;
     }
 }

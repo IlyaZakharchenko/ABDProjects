@@ -2,7 +2,8 @@ package reader;
 
 import base.BaseEmployeeReader;
 import base.Employee;
-import parser.FileEmployeeParser;
+import exception.WrongFormatException;
+import parser.EmployeeParser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,24 +13,23 @@ import java.util.ArrayList;
 
 public class FileEmployeeReader extends BaseEmployeeReader {
 
-    private final FileEmployeeParser PARSER = new FileEmployeeParser();
+    private final EmployeeParser parser;
+
+    public FileEmployeeReader(EmployeeParser parser) {
+        this.parser = parser;
+    }
 
     @Override
-    public ArrayList<Employee> readEmployee(String filePath) {
+    public ArrayList<Employee> readEmployee(String filePath) throws IOException, WrongFormatException {
         ArrayList<Employee> employees = new ArrayList<>();
-        try {
-            File file = new File(filePath);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            while (true) {
-                String line = reader.readLine();
-                if (line == null) {
-                    break;
-                }
-                employees.add(PARSER.parseEmployee(line));
+        File file = new File(filePath);
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        while (true) {
+            String line = reader.readLine();
+            if (line == null) {
+                break;
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            employees.add(parser.parseEmployee(line));
         }
         return employees;
     }

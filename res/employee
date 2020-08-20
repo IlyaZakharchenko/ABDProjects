@@ -1,8 +1,8 @@
-HE|0|Ivan|1664.0
-HE|2|Kirill|1164.8
-FE|7|Nikita|1000.0
-HE|4|Gennady|832.0
-FE|1|Mariya|500.0
-HE|3|Alex|499.20000000000005
-FE|5|Bogdan|350.0
-FE|6|Ilya|200.0
+HourEmployee|0|Ivan|10.0
+HourEmployee|2|Kirill|7.0
+FulltimeEmployee|7|Nikita|1000.0
+HourEmployee|4|Gennady|5.0
+FulltimeEmployee|1|Mariya|500.0
+HourEmployee|3|Alex|3.0
+FulltimeEmployee|5|Bogdan|350.0
+FulltimeEmployee|6|Ilya|200.0

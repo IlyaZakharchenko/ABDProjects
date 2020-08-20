@@ -1,10 +1,10 @@
 package base;
 
 public abstract class Employee {
-    protected String type;
     protected double payment;
     private int id;
     private String name;
+    private final String type = getClass().getSimpleName();
 
     public Employee(int id, String name, double payment) {
         this.id = id;
@@ -20,28 +20,32 @@ public abstract class Employee {
         this.name = name;
     }
 
-    public void setPayment(double payment) {
-        this.payment = payment;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public double getPayment() {
+        return payment;
+    }
+
+    public void setPayment(double payment) {
+        this.payment = payment;
     }
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "id=" + id +
+        return type + "{" +
+                "payment=" + payment +
+                ", id=" + id +
                 ", name='" + name + '\'' +
-                ", payment=" + payment +
                 '}';
     }
 

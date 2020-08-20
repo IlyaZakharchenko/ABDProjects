@@ -1,11 +1,18 @@
 import base.Employee;
-import reader.FileEmployeeReader;
+import exception.WrongFormatException;
 import model.FulltimeEmployee;
 import model.HourEmployee;
+import parser.FileEmployeeParser;
+import parser.JsonEmployeeParser;
+import reader.EmployeeReader;
+import reader.FileEmployeeReader;
 import reader.HttpEmployeeReader;
+import utils.EmployeePaymentComparator;
+import writer.EmployeeWriter;
 import writer.FileEmployeeWriter;
 import writer.HttpEmployeeWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
@@ -18,20 +25,30 @@ public class Main {
         writeToFile(employeeList, "res\\employee");
         readFromFile("res\\employee");
         readFromWrongFile("res\\wrong_employee");
-        readFromHttp("https://raw.githubusercontent.com/IlyaZakharchenko/ABDProjects/master/employee.json");
+        readFromHttp("https://raw.githubusercontent.com/IlyaZakharchenko/ABDProjects/HW_13.08/employee.json");
     }
 
     private static void readFromHttp(String url) {
-        HttpEmployeeReader reader = new HttpEmployeeReader();
-        ArrayList<Employee> employees = reader.readEmployee(url);
-        for (Employee employee : employees) {
-            System.out.println(employee.toString());
+        EmployeeReader reader = new HttpEmployeeReader(new JsonEmployeeParser());
+        try {
+            ArrayList<Employee> employees = reader.readEmployee(url);
+            for (Employee employee : employees) {
+                System.out.println(employee.toString());
+            }
+        } catch (WrongFormatException e) {
+            System.err.println("Exception while reading " + url + ": " + e.getLocalizedMessage());
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
         }
     }
 
     private static void writeToHttp(String url, ArrayList<Employee> employeeList) {
-        HttpEmployeeWriter writer = new HttpEmployeeWriter();
-        writer.writeEmployee(employeeList, url);
+        EmployeeWriter writer = new HttpEmployeeWriter();
+        try {
+            writer.writeEmployee(employeeList, url);
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        }
     }
 
     public static ArrayList<Employee> generateData() {
@@ -48,15 +65,7 @@ public class Main {
     }
 
     private static void sortEmployee(ArrayList<Employee> employeeList) {
-        employeeList.sort((o1, o2) -> {
-            if (o1.calculatePayment() > o2.calculatePayment()) {
-                return -1;
-            } else if (o1.calculatePayment() < o2.calculatePayment()) {
-                return 1;
-            } else {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        employeeList.sort(new EmployeePaymentComparator());
     }
 
     private static void printTop5EmployeeNames(ArrayList<Employee> employeeList) {
@@ -72,19 +81,35 @@ public class Main {
     }
 
     private static void writeToFile(ArrayList<Employee> employeeList, String filePath) {
-        FileEmployeeWriter writer = new FileEmployeeWriter();
-        writer.writeEmployee(employeeList, filePath);
+        EmployeeWriter writer = new FileEmployeeWriter(new FileEmployeeParser());
+        try {
+            writer.writeEmployee(employeeList, filePath);
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        }
     }
 
     private static void readFromFile(String filePath) {
-        FileEmployeeReader reader = new FileEmployeeReader();
-        for(Employee employee : reader.readEmployee(filePath)) {
-            System.out.println(employee.toString());
+        EmployeeReader reader = new FileEmployeeReader(new FileEmployeeParser());
+        try {
+            for (Employee employee : reader.readEmployee(filePath)) {
+                System.out.println(employee.toString());
+            }
+        } catch (WrongFormatException e) {
+            System.err.println("Exception while reading " + filePath + ": " + e.getLocalizedMessage());
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
         }
     }
 
     private static void readFromWrongFile(String filePath) {
-        FileEmployeeReader reader = new FileEmployeeReader();
-        reader.readEmployee(filePath);
+        EmployeeReader reader = new FileEmployeeReader(new FileEmployeeParser());
+        try {
+            reader.readEmployee(filePath);
+        } catch (WrongFormatException e) {
+            System.err.println("Exception while reading " + filePath + ": " + e.getLocalizedMessage());
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        }
     }
 }
