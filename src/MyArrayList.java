@@ -172,8 +172,9 @@ public class MyArrayList<ELEMENT> extends AbstractList<ELEMENT>
 
     @NotNull
     public <ARRAY> ARRAY[] toArray(ARRAY[] a) {
-        if (a.length < size)
+        if (a.length < size) {
             return (ARRAY[]) Arrays.copyOf(elementData, size, a.getClass());
+        }
         System.arraycopy(elementData, 0, a, 0, size);
         if (a.length > size)
             a[size] = null;
@@ -311,19 +312,23 @@ public class MyArrayList<ELEMENT> extends AbstractList<ELEMENT>
         }
     }
 
+    @NotNull
     @Override
     public Iterator<ELEMENT> iterator() {
-        return super.iterator();
+        return listIterator();
     }
 
+    @NotNull
     @Override
     public ListIterator<ELEMENT> listIterator() {
-        return super.listIterator();
+        return new ListItr(0);
     }
 
+    @NotNull
     @Override
     public ListIterator<ELEMENT> listIterator(int index) {
-        return super.listIterator(index);
+        rangeCheckForAdd(index);
+        return new ListItr(index);
     }
 
     private class ListItr implements ListIterator<ELEMENT> {
